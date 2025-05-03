@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #84e4a8;
+      text-align: center;
+      color: #255236;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    label {
+      font-weight: bold;
+    }
+    textarea, select, input {
+      width: 100%;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #255236;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #1e3e2a;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Feedback do Site</h2>
+    <form id="feedbackForm">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required>
+
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="avaliacao">Avaliação:</label>
+      <select id="avaliacao" name="avaliacao">
+        <option value="5">Ótimo</option>
+        <option value="4">Bom</option>
+        <option value="3">Regular</option>
+        <option value="2">Ruim</option>
+        <option value="1">Muito Ruim</option>
+      </select>
+
+      <label for="comentario">Comentário:</label>
+      <textarea id="comentario" name="comentario" rows="4" required></textarea>
+
+      <label for="feedbackEstoque">Feedback do estoque da empresa:</label>
+      <textarea id="feedbackEstoque" name="feedbackEstoque" rows="4" required></textarea>
+
+      <button type="submit">Enviar Feedback</button>
+    </form>
+  </div>
+
+  <!-- Firebase SDK e JavaScript -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCwZrKMmn70OnH0BbAzkRHWS62LAD50aZ8",
+      authDomain: "nb2025-3schecklist.firebaseapp.com",
+      projectId: "nb2025-3schecklist",
+      storageBucket: "nb2025-3schecklist.firebasestorage.app",
+      messagingSenderId: "873475092706",
+      appId: "1:873475092706:web:0a5f412407c00e3467eebb",
+      measurementId: "G-VDW2TYSSS2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('feedbackForm');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const avaliacao = document.getElementById('avaliacao').value;
+      const comentario = document.getElementById('comentario').value;
+      const feedbackEstoque = document.getElementById('feedbackEstoque').value;
+
+      try {
+        await addDoc(collection(db, "feedbacks"), {
+          nome,
+          email,
+          avaliacao,
+          comentario,
+          feedbackEstoque,
+          data: new Date()
+        });
+
+        alert("✅ Feedback enviado com sucesso!");
+        form.reset();
+      } catch (error) {
+        console.error("Erro ao salvar feedback:", error);
+        alert("❌ Erro ao enviar feedback.");
+      }
+    });
+  </script>
+</body>
+</html>
+<div id="resultados" style="margin-top: 20px;"></div>
+

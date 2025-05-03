@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feedback</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #84e4a8;
+      text-align: center;
+      color: #255236;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    label, textarea, input, select, button {
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      padding: 8px;
+    }
+    button {
+      background-color: #255236;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Feedback</h2>
+    <form id="feedbackForm">
+      <input type="text" id="nome" placeholder="Seu nome" required />
+      <input type="email" id="email" placeholder="Seu e-mail" required />
+      <select id="avaliacao">
+        <option value="5">Ótimo</option>
+        <option value="4">Bom</option>
+        <option value="3">Regular</option>
+        <option value="2">Ruim</option>
+        <option value="1">Muito Ruim</option>
+      </select>
+      <textarea id="mensagem" placeholder="Comentário" rows="3" required></textarea>
+      <label for="feedbackEstoque">Feedback do estoque da empresa:</label>
+      <textarea id="feedbackEstoque" name="feedbackEstoque" rows="4" required></textarea>
+      <button type="submit">Enviar Feedback</button>
+    </form>
+  </div>
+
+  <!-- Área para exibir resultados -->
+  <div id="resultados" style="margin-top: 30px; padding: 20px;"></div>
+
+  <!-- Firebase + JS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCwZrKMmn70OnH0BbAzkRHWS62LAD50aZ8",
+      authDomain: "nb2025-3schecklist.firebaseapp.com",
+      projectId: "nb2025-3schecklist",
+      storageBucket: "nb2025-3schecklist.firebasestorage.app",
+      messagingSenderId: "873475092706",
+      appId: "1:873475092706:web:0a5f412407c00e3467eebb",
+      measurementId: "G-VDW2TYSSS2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("feedbackForm");
+    const resultadosDiv = document.getElementById("resultados");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+      const avaliacao = document.getElementById("avaliacao").value;
+      const mensagem = document.getElementById("mensagem").value;
+
+      // Simulando dados de checklist preenchido
+      const totalOpcoes = 15; // número total de itens na checklist
+      const opcoesMarcadas = x; // suponha que o usuário marcou 8
+
+      await addDoc(collection(db, "checklists"), {
+        nome,
+        email,
+        avaliacao,
+        mensagem,
+        totalOpcoes,
+        opcoesMarcadas,
+        data: Timestamp.now()
+      });
+
+      // Mostra os resultados após o envio
+      mostrarResultadosChecklist();
+    });
+
+    async function mostrarResultadosChecklist() {
+      const resultadosRef = collection(db, "checklists");
+      const q = query(resultadosRef, orderBy("data", "desc"));
+      const querySnapshot = await getDocs(q);
+
+      let html = "<h3>Resultados da Checklist</h3><ul>";
+      querySnapshot.forEach((doc) => {
+        const d = doc.data();
+        const nome = d.nome || "Desconhecido";
+        const data = d.data.toDate().toLocaleDateString("pt-BR");
+        const total = d.totalOpcoes || 1;
+        const marcadas = d.opcoesMarcadas || 0;
+        const porcentagem = ((marcadas / total) * 100).toFixed(1);
+
+        html += `<li>📅 ${data} | 👤 ${nome} | ✅ ${porcentagem}% (${marcadas}/${total})</li>`;
+      });
+      html += "</ul>";
+      resultadosDiv.innerHTML = html;
+    }
+  </script>
+</body>
+</html>

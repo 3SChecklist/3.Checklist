@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist 3S</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #84e4a8;
+            text-align: center;
+            color: #255236;
+            margin: 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 300px;
+        }
+        .button {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            background: #1a3d1a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .checklist {
+            display: none;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="home">
+        <div class="card">
+            <img src="Logotipo_delicado_monograma_feminino_bege_e_branco-removebg-preview.png" width="250px" alt="10px">
+            <h2>3S CHECKLIST</h2>
+            <p>Organize o estoque da sua empresa através do método 3S, facilitando o fluxo de produtos e funcionários no ambiente. O uso da checklist é indicado sempre que novos itens chegarem ao estoque.</p>
+            <button class="button" onclick="showChecklistMenu()">Continuar</button>
+        </div>
+    </div>
+
+    <div class="container" id="menu" style="display:none;">
+        <button class="button" onclick="showChecklist('utilizacao')">Senso de Utilização</button>
+        <button class="button" onclick="showChecklist('organizacao')">Senso de Organização</button>
+        <button class="button" onclick="showChecklist('limpeza')">Senso de Limpeza</button>
+    </div>
+
+    <div class="container checklist" id="utilizacao">
+        <h3>Senso de Utilização</h3>
+        <h4>O senso de utilização tem como objetivo recolher objetos, informações e dados desnecessários do ambiente de trabalho.</h4>
+        <input type="checkbox"> Retirar produtos vencidos;<br>
+        <input type="checkbox"> Retirar produtos danificados;<br>
+        <input type="checkbox"> Retirar caixas vazias;<br>
+        <input type="checkbox"> Retirar objetos sem uso do local.<br>
+        <label for="mensagem">Resposta aberta:</label>
+        <button class="button" onclick="backToMenu()">Finalizado</button>
+    </div>
+
+    <div class="container checklist" id="organizacao">
+        <h3>Senso de Organização</h3>
+        <h4>O senso de organização consiste em fazer a seleção dos materiais, fazendo uma classificação do mais utilizado para o menos.</h4>
+        <input type="checkbox"> Separar produtos por categorias;<br>
+        <input type="checkbox"> Evidenciar produtos próximos do vencimento;<br>
+        <input type="checkbox"> Evidenciar produtos com maior demanda;<br>
+        <input type="checkbox"> Verificar se os lotes estão identificados.<br>
+        <label for="mensagem">Resposta aberta:</label>
+        <textarea id="mensagem" name="mensagem" rows="4" required></textarea>
+        <button class="button" onclick="backToMenu()">Finalizado</button>
+    </div>
+    <div class="container checklist" id="limpeza">
+        <h3>Senso de Limpeza</h3>
+        <h4>O senso senso de limpeza consiste em manter o ambiente de trabalho limpo, higiênico e seguro.</h4>
+        <input type="checkbox"> Retirar o excesso de poeira das prateleiras;<br>
+        <input type="checkbox"> Varrer ou aspirar o local;<br>
+        <input type="checkbox"> Desinfetar o local;<br>
+        <input type="checkbox"> Garantir que os objetos de segurança estejam limpos e em boas condições (extintores e sinalizadores).<br>
+        <label for="mensagem">Resposta aberta:</label>
+        <textarea id="mensagem" name="mensagem" rows="4" required></textarea>
+        <button class="button" onclick="backToMenu()">Finalizado</button>
+        
+
+    <script>
+        function showChecklistMenu() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('menu').style.display = 'block';
+        }
+
+        function showChecklist(id) {
+            document.getElementById('menu').style.display = 'none';
+            document.querySelectorAll('.checklist').forEach(el => el.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function backToMenu() {
+            document.querySelectorAll('.checklist').forEach(el => el.style.display = 'none');
+            document.getElementById('menu').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+    </div>
+    <a href="feedback.html">Dê seu Feedback</a>
